@@ -27,39 +27,44 @@ struct Node{		// Ein "Element" das einen Wert enthält und einen Pointer auf sich
 
 Node *anchor1 = NULL;
 Node *anchor2 = NULL;
-
+Node *runvar = NULL;
 
 void InsertAtBegin(int x){
 	Node* new_node= new Node;     // Neues Element wird erstellt.
 	new_node->Wert= x;				// new_node->Wert  heißt, dass das neue Element vom Typ Node
-									// mit Pfeiloperator auf Wert zeigt und gleich x gesetzt wird
 
-	if(anchor1){		// Liste vorhanden
-		new_node->next=anchor1;	// Der anchor1  zeigt auf das neue Element
-		anchor1->back=new_node; // ?!???
+	if(!anchor1){
+		new_node->next= NULL;
+		new_node->back=NULL;
+		anchor1=new_node;
+		anchor2=new_node;
 	}
-	else{			// Liste nicht vorhanden
-		new_node->next = NULL;	// NULL setzten damit die node nicht auf random Speicher zeigt
-		new_node->back = NULL;	// same
-		anchor2 = new_node;
+	else{
+		anchor2->back=new_node;
+		new_node->next=anchor2;
+		anchor1=new_node;
+		new_node->back=NULL;
 	}
-	anchor1 = new_node;
-}
+
+	}
+
 
 void InsertAtEnd(int x){
 	Node* new_node= new Node;	// Neues Element wird erstellt.
 	new_node->Wert= x;			// gleiche wie bei InsertAtBegin()
 
-	if(anchor1){
+	if(!anchor1){		// Keine Liste vorhanden (Erstes Element hinzufügen)
+		new_node->next= NULL;
+		new_node->back=NULL;
+		anchor1=new_node;
+		anchor2=new_node;
+	}
+	else{				// Liste vorhanden
 		anchor2->next=new_node;
 		new_node->back=anchor2;
-	}
-	else{
+		anchor2=new_node;
 		new_node->next=NULL;
-		new_node->back=NULL;
-		anchor1= new_node;
 	}
-	anchor2=new_node;
 }
 
 void InsertSorted(int x){
@@ -68,10 +73,20 @@ void InsertSorted(int x){
 
 void PrintList(){
 
+	runvar=anchor1;
+	while(runvar){
+		cout << runvar->Wert << endl;
+		runvar=runvar->next;
+	}
 }
 
 void PrintListReversed(){
 
+	runvar=anchor2;
+	while(runvar){
+		cout << runvar->Wert << endl;
+		runvar=runvar->back;
+	}
 }
 
 void BubbleSort(){
